@@ -1,4 +1,4 @@
- // Selectors
+// Selectors
 const talkButton = document.querySelector('.talk');
 const contentElement = document.querySelector('.content');
 
@@ -14,25 +14,9 @@ function speak(text) {
     window.speechSynthesis.speak(utterance);
 }
 
-// Greeting function
-function wishMe() {
-    const currentTime = new Date();
-    const hour = currentTime.getHours();
 
-    if (hour >= 0 && hour < 12) {
-        speak("Good Morning Suheb...");
-    } else if (hour >= 12 && hour < 17) {
-        speak("Good Afternoon Master...");
-    } else {
-        speak("Good Evening Sir...");
-    }
-}
 
-// Initialize JARVIS on load
-window.addEventListener('load', () => {
-    speak("Initializing JARVIS..");
-    wishMe();
-});
+
 
 // Speech recognition
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -49,6 +33,29 @@ talkButton.addEventListener('click', () => {
     contentElement.textContent = "Listening....";
     recognition.start();
 });
+
+// Greeting function
+function wishMe() {
+    const currentTime = new Date();
+    const hour = currentTime.getHours();
+
+    if (hour >= 0 && hour < 12) {
+        speak("Good Morning Suheb...");
+    } else if (hour >= 12 && hour < 17) {
+        speak("Good Afternoon Master...");
+    } else {
+        speak("Good Evening Sir...");
+    }
+}
+
+
+// Initialize JARVIS on load
+window.addEventListener('load', () => {
+    speak("Initializing JARVIS..");
+    wishMe();
+});
+
+
 
 // Command processing function
 function takeCommand(message) {
@@ -95,10 +102,10 @@ function takeCommand(message) {
             window.open("https://suheb-portfolio.vercel.app/", "_blank");
             speak("My journey started on May 10th, 2024, under Syed Sha Suheb's guidance at SigmaCodingWithSuheb, delving into MERN stack, software engineering, and data science.");
             break;
-         case message.includes('open chat gpt'):
-             window.open('https://chatgpt.com/?oai-dm=1');
-             speak("Welcome to ChatGPT, your digital companion for exploration, inquiry, and conversation. How may I assist you today?");
-             break;
+        case message.includes('open chat gpt'):
+            window.open('https://chatgpt.com/?oai-dm=1');
+            speak("Welcome to ChatGPT, your digital companion for exploration, inquiry, and conversation. How may I assist you today?");
+            break;
         default:
             window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
             const defaultText = `I found some information for ${message} on Google`;
