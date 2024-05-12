@@ -1,0 +1,130 @@
+
+/* Import Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700&display=swap");
+
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto Mono", monospace;
+}
+
+body {
+  background-color: #0f172a;
+  background: transparent;
+  animation: animatedBackground 2s ease-in-out infinite;
+}
+
+@keyframes animatedBackground {
+  0% {background-image: linear-gradient(90deg, #0f172a 0%, #302b63 50%, #24243e 100%);}
+  50% {background-image: linear-gradient(90deg, #151c30 0%, #2e2858 50%, #2c2c40 100%);}
+  100% {background-image: linear-gradient(90deg, #0f172a 0%, #302b63 50%, #24243e 100%);}
+}
+
+/* ... Rest of the CSS code ... */
+
+
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  mix-blend-mode: screen; /* Adjust blending mode as per your preference */
+  background-color:black; /* Your background color */
+}
+
+/* .main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  padding: 20px;
+} */
+
+.image-container {
+  text-align: center;
+  padding: 10px;
+}
+
+.image-container .image {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container .image img {
+  width: 400px;
+  align-items: center;
+  max-width: 100%;
+  height: auto;
+}
+
+.image-container h1 {
+  color: #f82ba3;
+  text-align: center;
+  margin-bottom: 8px;
+  font-size: 40px;
+}
+
+.image-container p {
+  color: #36e20b;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40vw;
+  height: 50px;
+  border-radius: 20px;
+  background: #ac0e6a;
+  margin-bottom: 12px;
+}
+
+.input .talk {
+  background: transparent;
+  outline: none;
+  border: none;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.input .talk i {
+  font-size: 30px;
+  color: #aed0d0;
+}
+
+.input .content {
+  color: #1bf726;
+  font-size: 20px;
+  margin-right: 20px;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 600px) {
+  .image-container h1 {
+    font-size: 24px;
+  }
+
+  .image-container p {
+    font-size: 14px;
+  }
+
+  .input .content {
+    font-size: 16px;
+  }
+}
