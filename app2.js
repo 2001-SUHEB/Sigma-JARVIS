@@ -95,6 +95,10 @@ function takeCommand(message) {
             window.open("https://suheb-portfolio.vercel.app/", "_blank");
             speak("My journey started on May 10th, 2024, under Syed Sha Suheb's guidance at SigmaCodingWithSuheb, delving into MERN stack, software engineering, and data science.");
             break;
+         case message.includes('open chat gpt'):
+             window.open('https://chatgpt.com/?oai-dm=1');
+             speak("Welcome to ChatGPT, your digital companion for exploration, inquiry, and conversation. How may I assist you today?");
+             break;
         default:
             window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
             const defaultText = `I found some information for ${message} on Google`;

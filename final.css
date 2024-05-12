@@ -1,5 +1,4 @@
-
-/* Import Google Font */
+ /* Import Google Font */
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700&display=swap");
 
 /* Reset CSS */
@@ -22,9 +21,6 @@ body {
   100% {background-image: linear-gradient(90deg, #0f172a 0%, #302b63 50%, #24243e 100%);}
 }
 
-/* ... Rest of the CSS code ... */
-
-
 .main {
   min-height: 100vh;
   display: flex;
@@ -33,18 +29,8 @@ body {
   justify-content: center;
   padding: 20px;
   mix-blend-mode: screen; /* Adjust blending mode as per your preference */
-  background-color:black; /* Your background color */
+  background-color: black; /* Your background color */
 }
-
-/* .main {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  padding: 20px;
-} */
 
 .image-container {
   text-align: center;
@@ -66,17 +52,32 @@ body {
 }
 
 .image-container h1 {
-  color: #f82ba3;
+  color: #fff; /* Changed font color to white */
   text-align: center;
   margin-bottom: 8px;
-  font-size: 40px;
+  font-size: 3rem;
+  line-height: 1.2;
+  animation: textAnimation 2s ease-in-out infinite;
+}
+
+@keyframes textAnimation {
+  0% {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+  }
+  50% {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff;
+  }
+  100% {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+  }
 }
 
 .image-container p {
-  color: #36e20b;
+  color: #fff; /* Changed font color to white */
   text-align: center;
   margin-bottom: 40px;
-  font-size: 16px;
+  font-size: 1.2rem;
+  animation: textAnimation 2s ease-in-out infinite;
 }
 
 .input {
@@ -99,32 +100,49 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 15px;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
 .input .talk i {
-  font-size: 30px;
-  color: #aed0d0;
+  font-size: 2.5rem;
+  color: #fff; /* Changed font color to white */
 }
 
 .input .content {
-  color: #1bf726;
-  font-size: 20px;
+  color: #fff; /* Changed font color to white */
+  font-size: 1.5rem;
   margin-right: 20px;
 }
 
 /* Media Queries */
 @media only screen and (max-width: 600px) {
+  /* Adjust font sizes for mobile devices */
   .image-container h1 {
-    font-size: 24px;
+    font-size: 1.8rem;
   }
 
   .image-container p {
-    font-size: 14px;
+    font-size: 1rem;
   }
 
   .input .content {
-    font-size: 16px;
+    font-size: 1.2rem;
+  }
+
+  /* Adjust button size and text for mobile devices */
+  .input {
+    width: 30vw;
+    height: 40px;
+  }
+
+  .input .talk {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .input .talk i {
+    font-size: 2rem;
   }
 }
