@@ -101,7 +101,7 @@
    width: 40vw;
    height: 50px;
    border-radius: 20px;
-   background: #ac0e6a;
+   background: #2c3e50;
    margin-bottom: 12px;
  }
 
@@ -132,16 +132,20 @@
   border-radius: 50%;
 }
 
+.input .talk:hover {
+  background: #2980b9; /* Change button color on hover */
+}
 
 
  .input .talk i {
-   font-size: 2.5rem;
+   font-size: 1.5rem;
    color: #fff;
    /* Changed font color to white */
  }
 
+
  .input .content {
-   color: #fff;
+   color: #ecf0f1;
    /* Changed font color to white */
    font-size: 1.5rem;
    margin-right: 20px;
@@ -174,7 +178,7 @@
      /* Adjust width for smaller screens */
      height: 60px;
      /* Increase height for better visibility */
-     background: #ac0e6a;
+     background: #2c3e50;
      /* Change button color according to site theme */
    }
 
@@ -185,11 +189,11 @@
      /* Match the height of the input container */
      font-size: 1.5rem;
      /* Increase font size for better readability */
-     background: #fff;
+     background: linear-gradient(to right, #0070FF, #643DFF);
      /* Change button color according to site theme */
      border-radius: 50%;
      /* Make the button round */
-     color: #ac0e6a;
+     color: #fff;
      /* Change text color to match site theme */
      display: flex;
      justify-content: center;
@@ -198,7 +202,7 @@
 
    .input .talk i {
      font-size: 1.5rem;
-     color: #ac0e6a;
+     color: #fff;
      /* Change icon color to match button background */
    }
  }

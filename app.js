@@ -1,108 +1,235 @@
-const btn = document.querySelector('.talk')
-const content = document.querySelector('.content')
+// Selectors
+const talkButton = document.querySelector('.talk');
+const contentElement = document.querySelector('.content');
 
+// Speech Synthesis
+const speechSynthesis = window.speechSynthesis;
+const speechUtterance = new SpeechSynthesisUtterance('');
 
-function speak(text){
-    const text_speak = new SpeechSynthesisUtterance(text);
-
-    text_speak.rate = 1;
-    text_speak.volume = 1;
-    text_speak.pitch = 1;
-
-    window.speechSynthesis.speak(text_speak);
+function speak(text) {
+    speechUtterance.text = text;
+    speechUtterance.voice = getMaleUKEnglishVoice();
+    speechUtterance.rate = 0.9;
+    speechUtterance.volume = 1;
+    speechUtterance.pitch = 1.2;
+    speechSynthesis.speak(speechUtterance);
 }
 
-function wishMe(){
-    var day = new Date();
-    var hour = day.getHours();
-
-    if(hour>=0 && hour<12){
-        speak("Good Morning Suheb...")
-    }
-
-    else if(hour>12 && hour<17){
-        speak("Good Afternoon Master...")
-    }
-
-    else{
-        speak("Good Evenining Sir...")
-    }
-
+function getMaleUKEnglishVoice() {
+    return speechSynthesis.getVoices().find(voice => voice.name === 'Google UK English Male');
 }
 
-window.addEventListener('load', ()=>{
+// Speech Recognition
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    contentElement.textContent = transcript;
+    takeCommand(transcript.toLowerCase());
+};
+
+// Initialize JARVIS on load
+window.addEventListener('load', () => {
     speak("Initializing JARVIS..");
     wishMe();
 });
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// Button click event
+talkButton.addEventListener('click', () => {
+    contentElement.textContent = "Listening....";
+    recognition.start();
+});
 
-const recognition =  new SpeechRecognition();
+// Greeting function
+function wishMe() {
+    const currentTime = new Date();
+    const hour = currentTime.getHours();
 
-recognition.onresult = (event)=>{
-    const currentIndex = event.resultIndex;
-    const transcript = event.results[currentIndex][0].transcript;
-    content.textContent = transcript;
-    takeCommand(transcript.toLowerCase());
-
+    if (hour >= 0 && hour < 12) {
+        speak(GREETING_MORNING);
+    } else if (hour >= 12 && hour < 17) {
+        speak(GREETING_AFTERNOON);
+    } else {
+        speak(GREETING_EVENING);
+    }
 }
 
-btn.addEventListener('click', ()=>{
-    content.textContent = "Listening...."
-    recognition.start();
-})
+// Modify takePicture function to prompt for save or delete
+function takePicture() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            // Create video element
+            const video = document.createElement('video');
+            document.body.appendChild(video);
+            video.srcObject = stream;
+            video.onloadedmetadata = function (e) {
+                video.play();
+            };
+            // Prompt user to save or delete
+            const confirmation = confirm("Do you want to save the picture?");
+            setTimeout(function () {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const image = canvas.toDataURL('image/jpeg');
+                if (confirmation) {
+                    // Do something with the image data (e.g., upload to a server)
+                    speak("Picture saved.");
+                } else {
+                    speak("Picture deleted.");
+                }
+                closeCamera(); // Close the camera after taking the picture
+            }, 3000); // Adjust the delay as needed
+        })
+        .catch(function (err) {
+            console.error('Error accessing camera: ', err);
+        });
+}
 
-function takeCommand(message){
-    if(message.includes('hey') || message.includes('hello')){
-        speak("Hello Sir, How May I Help You?");
-    }
-    else if(message.includes("open google")){
-        window.open("https://google.com", "_blank");
-        speak("Opening Google...")
-    }
-    else if(message.includes("open youtube")){
-        window.open("https://youtube.com", "_blank");
-        speak("Opening Youtube...")
-    }
-    else if(message.includes("open facebook")){
-        window.open("https://facebook.com", "_blank");
-        speak("Opening Facebook...")
-    }
 
-    else if(message.includes('what is') || message.includes('who is') || message.includes('what are')) {
-        window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
-        const finalText = "This is what i found on internet regarding " + message;
-	    speak(finalText);
-  
-    }
 
-    else if(message.includes('wikipedia')) {
-        window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "")}`, "_blank");
-        const finalText = "This is what i found on wikipedia regarding " + message;
-        speak(finalText);
-    }
 
-    else if(message.includes('time')) {
-        const time = new Date().toLocaleString(undefined, {hour: "numeric", minute: "numeric"})
-        const finalText = time;
-        speak(finalText);
-    }
+// JARVIS Turn On Camera
+function turnOnCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            const video = document.createElement('video');
+            document.body.appendChild(video);
 
-    else if(message.includes('date')) {
-        const date = new Date().toLocaleString(undefined, {month: "short", day: "numeric"})
-        const finalText = date;
-        speak(finalText);
-    }
+            video.srcObject = stream;
+            video.onloadedmetadata = function (e) {
+                video.play();
+            };
+        })
+        .catch(function (err) {
+            console.error('Error accessing camera: ', err);
+        });
+}
 
-    else if(message.includes('calculator')) {
-        window.open('Calculator:///')
-        const finalText = "Opening Calculator";
-        speak(finalText);
-    }
 
-    else {
-        window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
-        const finalText = "I found some information for " + message + " on google";
-        speak(finalText);
+// Function to close the camera or video stream
+function closeCamera() {
+    const videoElements = document.querySelectorAll('video');
+    videoElements.forEach(video => {
+        video.srcObject.getTracks().forEach(track => track.stop());
+        video.parentElement.removeChild(video);
+    });
+}
+
+
+function playMusic(url) {
+    const audio = new Audio(url);
+    audio.play();
+}
+
+
+
+
+
+
+
+
+
+
+const GREETING_MORNING = "Good Morning Suheb...";
+const GREETING_AFTERNOON = "Good Afternoon Master...";
+const GREETING_EVENING = "Good Evening Sir...";
+
+// Command processing function
+function takeCommand(message) {
+    switch (true) {
+        case message.includes('hey') || message.includes('hello'):
+            speak("Hello Sir, How May I Help You?");
+            break;
+        case message.includes("open google"):
+            openUrl("https://google.com");
+            speak("Opening Google...");
+            break;
+        case message.includes("open youtube"):
+            openUrl("https://youtube.com");
+            speak("Opening Youtube...");
+            break;
+        case message.includes("open facebook"):
+            openUrl("https://facebook.com");
+            speak("Opening Facebook...");
+            break;
+        case message.includes('what is') || message.includes('who is') || message.includes('what are'):
+            searchGoogle(message);
+            break;
+        case message.includes('wikipedia'):
+            openWikipedia(message);
+            break;
+        case message.includes('time'):
+            speak(getCurrentTime());
+            break;
+        case message.includes('date'):
+            speak(getCurrentDate());
+            break;
+        case message.includes('calculator'):
+            openUrl('Calculator:///');
+            speak("Opening Calculator");
+            break;
+        case (message.includes('who') && message.includes('made') && message.includes('you')) || (message.includes('who') && message.includes('created') && message.includes('you')):
+            openUrl("https://suheb-portfolio.vercel.app/");
+            speak("My journey started on May 10th, 2024, under Syed Sha Suheb's guidance at SigmaCodingWithSuheb, delving into MERN stack, software engineering, and data science.");
+            break;
+        case message.includes('open chat gpt'):
+            openUrl('https://chatgpt.com/?oai-dm=1');
+            speak("Welcome to ChatGPT, your digital companion for exploration, inquiry, and conversation. How may I assist you today?");
+            break;
+        case message.includes('shutdown'):
+            speak("Goodbye, Sir.");
+            setTimeout(() => {
+                window.close(); // Close the window after saying goodbye
+            }, 2000); // Delay closing for 2 seconds (adjust as needed)
+            break;
+        case message.includes('take a picture'):
+            takePicture();
+            break;
+        case message.includes('turn on camera'):
+            turnOnCamera();
+            break;
+        case message.includes('play music'):
+            // playMusic('C:\Users\ASUS\Desktop\My-Projects\JARVIS 1.0 Html Css Js\JARVIS 1.0 Html Css Js\luis_fonsi_despacito.mp3');
+            playMusic('luis_fonsi_despacito.mp3');
+
+            break;
+        case message.includes('turn off camera') || message.includes('close camera'):
+            closeCamera();
+            break;
+
+
+        default:
+            searchGoogle(message);
+            break;
     }
+}
+
+function openUrl(url) {
+    window.open(url, "_blank");
+}
+
+function searchGoogle(query) {
+    const searchQuery = query.replace(" ", "+");
+    openUrl(`https://www.google.com/search?q=${searchQuery}`);
+    const defaultText = `I found some information for ${query} on Google`;
+    speak(defaultText);
+}
+
+function openWikipedia(query) {
+    const searchQuery = query.replace("wikipedia", "").replace(" ", "_");
+    openUrl(`https://en.wikipedia.org/wiki/${searchQuery}`);
+    const wikiText = `This is what I found on Wikipedia regarding ${query}`;
+    speak(wikiText);
+}
+
+function getCurrentTime() {
+    return new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" });
+}
+
+function getCurrentDate() {
+    return new Date().toLocaleString(undefined, { month: "short", day: "numeric" });
 }
