@@ -58,36 +58,42 @@ function wishMe() {
 // Modify takePicture function to prompt for save or delete
 function takePicture() {
     navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function (stream) {
-            // Create video element
-            const video = document.createElement('video');
-            document.body.appendChild(video);
-            video.srcObject = stream;
-            video.onloadedmetadata = function (e) {
-                video.play();
-            };
-            // Prompt user to save or delete
-            const confirmation = confirm("Do you want to save the picture?");
-            setTimeout(function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const image = canvas.toDataURL('image/jpeg');
-                if (confirmation) {
-                    // Do something with the image data (e.g., upload to a server)
-                    speak("Picture saved.");
-                } else {
-                    speak("Picture deleted.");
-                }
-                closeCamera(); // Close the camera after taking the picture
-            }, 3000); // Adjust the delay as needed
-        })
-        .catch(function (err) {
-            console.error('Error accessing camera: ', err);
-        });
-}
+      .then(function (stream) {
+        // Create video element
+        const video = document.createElement('video');
+        document.body.appendChild(video);
+        video.srcObject = stream;
+        video.onloadedmetadata = function (e) {
+          video.play();
+        };
+        // Prompt user to save or delete
+        const confirmation = confirm("Do you want to save the picture?");
+        setTimeout(function () {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const image = canvas.toDataURL('image/jpeg');
+          if (confirmation) {
+            // Download the image
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = 'picture.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            speak("Picture saved.");
+          } else {
+            speak("Picture deleted.");
+          }
+          closeCamera(); // Close the camera after taking the picture
+        }, 3000); // Adjust the delay as needed
+      })
+      .catch(function (err) {
+        console.error('Error accessing camera: ', err);
+      });
+  }
 
 
 
@@ -134,6 +140,8 @@ const GREETING_AFTERNOON = "Good Afternoon Master...";
 const GREETING_EVENING = "Good Evening Sir...";
 
 // Command processing function
+
+
 function takeCommand(message) {
     switch (true) {
         case message.includes('hey') || message.includes('hello'):
@@ -198,6 +206,10 @@ function takeCommand(message) {
         case message.includes("open instagram"):
             openUrl("https://instagram.com");
             speak("Opening instagram...");
+            break;
+        case message.includes("initiate jarvis"):
+             speak("Initializing JARVIS..");
+             wishMe();
             break;
 
 
