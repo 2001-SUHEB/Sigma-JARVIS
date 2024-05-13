@@ -129,11 +129,6 @@ function playMusic(url) {
 
 
 
-
-
-
-
-
 const GREETING_MORNING = "Good Morning Suheb...";
 const GREETING_AFTERNOON = "Good Afternoon Master...";
 const GREETING_EVENING = "Good Evening Sir...";
@@ -199,6 +194,10 @@ function takeCommand(message) {
             break;
         case message.includes('turn off camera') || message.includes('close camera'):
             closeCamera();
+            break;
+        case message.includes("open instagram"):
+            openUrl("https://instagram.com");
+            speak("Opening instagram...");
             break;
 
 
