@@ -1,4 +1,4 @@
-// Selectors
+ // Selectors
 const talkButton = document.querySelector('.talk');
 const contentElement = document.querySelector('.content');
 
@@ -6,17 +6,36 @@ const contentElement = document.querySelector('.content');
 const speechSynthesis = window.speechSynthesis;
 const speechUtterance = new SpeechSynthesisUtterance('');
 
-function speak(text) {
-    speechUtterance.text = text;
-    speechUtterance.voice = getMaleUKEnglishVoice();
-    speechUtterance.rate = 0.9;
-    speechUtterance.volume = 1;
-    speechUtterance.pitch = 1.2;
-    speechSynthesis.speak(speechUtterance);
+let jarvisVoice;
+
+function getJarvisVoice() {
+  return new Promise((resolve) => {
+    if (jarvisVoice) {
+      resolve(jarvisVoice);
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        jarvisVoice = speechSynthesis.getVoices().find(
+          (voice) => voice.name === 'Google UK English Male'
+        );
+        if (jarvisVoice) {
+          resolve(jarvisVoice);
+        } else {
+          jarvisVoice = speechSynthesis.getVoices()[0];
+          resolve(jarvisVoice);
+        }
+      };
+    }
+  });
 }
 
-function getMaleUKEnglishVoice() {
-    return speechSynthesis.getVoices().find(voice => voice.name === 'Google UK English Male');
+async function speak(text) {
+  const voice = await getJarvisVoice();
+  speechUtterance.text = text;
+  speechUtterance.voice = voice;
+  speechUtterance.rate = 0.9;
+  speechUtterance.volume = 1;
+  speechUtterance.pitch = 1.2;
+  speechSynthesis.speak(speechUtterance);
 }
 
 // Speech Recognition
@@ -89,9 +108,6 @@ function takePicture() {
         });
 }
 
-
-
-
 // JARVIS Turn On Camera
 function turnOnCamera() {
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -109,7 +125,6 @@ function turnOnCamera() {
         });
 }
 
-
 // Function to close the camera or video stream
 function closeCamera() {
     const videoElements = document.querySelectorAll('video');
@@ -119,26 +134,22 @@ function closeCamera() {
     });
 }
 
-
+// Function to play music
 function playMusic(url) {
     const audio = new Audio(url);
     audio.play();
 }
 
+// Function to stop playing music
+function stopMusic() {
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+}
 
-
-
-
-
-
-
-
-
-const GREETING_MORNING = "Good Morning Suheb...";
-const GREETING_AFTERNOON = "Good Afternoon Master...";
-const GREETING_EVENING = "Good Evening Sir...";
-
-// Command processing function
+// Commands processing function
 function takeCommand(message) {
     switch (true) {
         case message.includes('hey') || message.includes('hello'):
@@ -195,12 +206,10 @@ function takeCommand(message) {
         case message.includes('play music'):
             // playMusic('C:\Users\ASUS\Desktop\My-Projects\JARVIS 1.0 Html Css Js\JARVIS 1.0 Html Css Js\luis_fonsi_despacito.mp3');
             playMusic('luis_fonsi_despacito.mp3');
-
             break;
         case message.includes('turn off camera') || message.includes('close camera'):
             closeCamera();
             break;
-
 
         default:
             searchGoogle(message);
@@ -208,10 +217,12 @@ function takeCommand(message) {
     }
 }
 
+// Function to open a URL in a new tab
 function openUrl(url) {
     window.open(url, "_blank");
 }
 
+// Function to search Google
 function searchGoogle(query) {
     const searchQuery = query.replace(" ", "+");
     openUrl(`https://www.google.com/search?q=${searchQuery}`);
@@ -219,6 +230,7 @@ function searchGoogle(query) {
     speak(defaultText);
 }
 
+// Function to open Wikipedia
 function openWikipedia(query) {
     const searchQuery = query.replace("wikipedia", "").replace(" ", "_");
     openUrl(`https://en.wikipedia.org/wiki/${searchQuery}`);
@@ -226,10 +238,12 @@ function openWikipedia(query) {
     speak(wikiText);
 }
 
+// Function to get current time
 function getCurrentTime() {
     return new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" });
 }
 
+// Function to get current date
 function getCurrentDate() {
     return new Date().toLocaleString(undefined, { month: "short", day: "numeric" });
 }
