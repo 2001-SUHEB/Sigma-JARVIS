@@ -1,0 +1,15 @@
+{
+  "name": "jarvis-1.0-html-css-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "suheb",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
