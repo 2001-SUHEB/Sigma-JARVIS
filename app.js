@@ -2,6 +2,10 @@
 const talkButton = document.querySelector('.talk');
 const contentElement = document.querySelector('.content');
 
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+});
+
 // Speech Synthesis
 const speechSynthesis = window.speechSynthesis;
 const speechUtterance = new SpeechSynthesisUtterance('');
