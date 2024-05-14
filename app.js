@@ -2,6 +2,40 @@
 const talkButton = document.querySelector('.talk');
 const contentElement = document.querySelector('.content');
 
+function isDevToolsOpen() {
+    return window.self !== window.top;
+  }
+  
+  if (isDevToolsOpen()) {
+    alert("Developer tools are not allowed.");
+  }
+  
+  window.addEventListener('contextmenu', function(e) {
+    if (isDevToolsOpen()) {
+      e.preventDefault();
+      alert("Developer tools are not allowed.");
+    }
+  }, false);
+  
+  setInterval(function() {
+    if (isDevToolsOpen()) {
+      alert("Developer tools are not allowed.");
+      closeDevTools();
+    }
+  }, 1000);
+  
+  function closeDevTools() {
+    // This function is a placeholder and does not actually close the developer tools
+    // It is only here to demonstrate the concept
+    alert("Developer tools are not allowed.");
+  }
+
+
+
+
+
+
+
 document.addEventListener('contextmenu', function(event) {
     event.preventDefault();
 });
