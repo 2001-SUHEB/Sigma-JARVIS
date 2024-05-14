@@ -187,7 +187,7 @@ function takeCommand(message) {
             openUrl('https://chatgpt.com/?oai-dm=1');
             speak("Welcome to ChatGPT, your digital companion for exploration, inquiry, and conversation. How may I assist you today?");
             break;
-        case message.includes('shutdown'):
+        case message.includes('shutdown')||message.includes('shut down'):
             speak("Goodbye, Sir.");
             setTimeout(() => {
                 window.close(); // Close the window after saying goodbye
